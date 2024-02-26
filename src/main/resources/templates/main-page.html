@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        header {
+            background-color: #ffffff;
+            padding: 10px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #dbdbdb;
+        }
+
+        .profile-info {
+            display: flex;
+        }
+
+        .profile-info a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #262626;
+            font-size: 16px;
+        }
+
+        .profile-info a:hover {
+            color: #0095f6;
+        }
+
+        button {
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        header > form {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            text-decoration: none;
+            border-radius: 8px;
+            color: black;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            padding: 0;
+        }
+
+        .user-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+
+        .user-card h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .post_user-card {
+            display: flex;
+            align-items: center;
+            color: black;
+        }
+
+        .post_user-card h2 {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .post_user-card img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+
+        .post {
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #ffffff;
+        }
+
+        .post > a > img {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .post h3 {
+            margin: 0;
+        }
+
+        .post p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .post_title_container {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+        }
+        .like_container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div>
+        <h1>Instagram</h1>
+    </div>
+    <form method="get" th:action="@{/home}">
+        <input type="hidden" name="userId" th:value="${user.id}">
+        <label>
+            <input type="text" name="search" placeholder="Enter username or full name">
+        </label>
+        <button type="submit">Search</button>
+    </form>
+    <div class="profile-info">
+        <a th:href="@{/profile(userId=${user.id})}">Profile</a>
+    </div>
+</header>
+<div class="container">
+    <h3>Users:</h3>
+    <ul>
+        <li th:if="${userList.isEmpty()}">
+            <p>No users</p>
+        </li>
+        <li th:each="user : ${userList}">
+            <a class="user-card" th:href="@{/profile(userId=${user.id})}">
+                <img th:src="${user.userInfo.image}" alt="User Image">
+                <h2 th:text="${user.username}"></h2>
+            </a>
+        </li>
+    </ul>
+    <h3>Posts</h3>
+    <ul>
+        <li th:if="${postList.isEmpty()}">
+            <p>No posts</p>
+        </li>
+        <li th:each="post : ${postList}">
+            <div class="post">
+                <a th:href="@{/post(postId=${post.getId()})}"><img th:src="${post.image.imageURL}" alt="Post Image"></a>
+                <div class="post_title_container">
+                    <div>
+                        <h3 th:text="${post.title}"></h3>
+                        <p th:text="${post.description}"></p>
+                    </div>
+                    <a class="post_user-card" th:href="@{/profile(userId=${post.user.id})}">
+                        <img th:src="${post.user.userInfo.image}" alt="User Image">
+                        <h2 th:text="${post.user.username}"></h2>
+                    </a>
+                </div>
+                <div class="like_container">
+                    <p th:text="${post.likes.size()}">
+                    </p> likes
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

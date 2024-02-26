@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SignUp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #262626;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border: 1px solid #dbdbdb;
+            border-radius: 4px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #dbdbdb;
+            box-sizing: border-box;
+        }
+
+        p {
+            margin: 0;
+            font-size: small;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #dbdbdb;
+            background-color: #0095f6;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0077b6;
+        }
+
+        .login-link {
+            color: #0095f6;
+            text-decoration: none;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Sign Up</h2>
+    <form action="#" th:action="@{/sign-up}" th:object="${newUser}" method="post">
+        <label>
+            <input type="text" th:field="*{username}" placeholder="User Name" required="required"/>
+        </label>
+        <label>
+            <input type="email" th:field="*{email}" placeholder="Email" required="required"/>
+        </label>
+        <label>
+            <input type="password" th:field="*{password}" placeholder="Password" required="required"/>
+        </label>
+        <label>
+            <input type="tel" th:field="*{phoneNumber}" placeholder="Phone Number" required="required"/>
+        </label>
+        <div th:if="${#fields.hasErrors('username')}" class="error-message">
+            <p th:each="error : ${#fields.errors('username')}" th:text="${error}">Error Message</p>
+        </div>
+        <div th:if="${#fields.hasErrors('phoneNumber')}" class="error-message">
+            <p th:each="error : ${#fields.errors('phoneNumber')}" th:text="${error}">Error Message</p>
+        </div>
+        <button type="submit">Register</button>
+    </form>
+    <p style="margin-top: 10px">Already have an account? <a class="login-link" href="/sign-in">Sign In</a></p>
+</div>
+</body>
+</html>
