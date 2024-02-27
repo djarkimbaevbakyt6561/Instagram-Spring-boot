@@ -20,7 +20,10 @@
             margin-bottom: 20px;
             padding: 10px;
         }
-
+       .comment-container > a {
+           text-decoration: none;
+           color: black;
+       }
         .comment {
             margin-bottom: 10px;
             font-size: 14px;
@@ -100,6 +103,17 @@
             margin-top: 20px;
             width: 500px;
         }
+        .tool_container > a {
+            text-decoration: none;
+            color: black;
+        }
+        .tool_container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .tool_container > p {
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -119,11 +133,21 @@
 </form>
 <div class="comments-container">
     <div class="comment-container" th:each="comment : ${comments}">
-        <div class="comment-details">
-            <span class="comment-user" th:text="${comment.user.username}"></span>
-            <span class="comment-date" th:text="${comment.createdAt}"></span>
-        </div>
-        <p class="comment" th:text="${comment.comment}"></p>
+        <a th:href="@{/comments/comment-by-id(commentId=${comment.id})}">
+            <div class="comment-details">
+                <span class="comment-user" th:text="${comment.user.username}"></span>
+                <span class="comment-date" th:text="${comment.createdAt}"></span>
+            </div>
+            <p class="comment" th:text="${comment.comment}"></p>
+            <div class="tool_container">
+                <p>
+                    <span th:text="${likesCountMap.get(comment.id)}"></span> likes
+                </p>
+                <a th:if="${comment.user.id == user.id}"
+                   th:href="@{/comments/deleteComment/{commentId}(commentId=${comment.id})}">Delete</a>
+            </div>
+
+        </a>
     </div>
 </div>
 </body>

@@ -205,8 +205,9 @@
                     </a>
                 </div>
                 <div class="like_container">
-                    <p th:text="${post.likes.size()}">
-                    </p> likes
+                    <p>
+                        <span th:text="${likesCountMap.get(post.id)}"></span> likes
+                    </p>
                 </div>
             </div>
         </li>

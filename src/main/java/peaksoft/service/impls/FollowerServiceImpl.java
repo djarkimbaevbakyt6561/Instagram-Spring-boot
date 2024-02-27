@@ -2,6 +2,7 @@ package peaksoft.service.impls;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import peaksoft.entities.Follower;
 import peaksoft.entities.User;
 import peaksoft.repository.FollowerRepository;
@@ -20,6 +21,7 @@ public class FollowerServiceImpl implements FollowerService {
     }
 
     @Override
+    @Transactional
     public void subscribe(User subscribeUser, User userBeingSubscribedTo) {
         try {
             Follower userBeingSubscribedToFollower = getFollowerByUserId(userBeingSubscribedTo.getId());
@@ -32,8 +34,6 @@ public class FollowerServiceImpl implements FollowerService {
                 userBeingSubscribedToFollower.getSubscribers().add(subscribeUser);
                 subscribeUserFollower.getSubscriptions().add(userBeingSubscribedTo);
             }
-            followerRepository.update(userBeingSubscribedToFollower);
-            followerRepository.update(subscribeUserFollower);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -73,6 +73,16 @@ public class FollowerServiceImpl implements FollowerService {
     public boolean isUserSubscribed(User subscribeUser, User userBeingSubscribedTo) {
         Follower userBeingSubscribedToFollower = getFollowerByUserId(userBeingSubscribedTo.getId());
         return userBeingSubscribedToFollower.getSubscribers().contains(subscribeUser);
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        try {
+            return followerRepository.getAllUsers();
+        } catch (Exception e){
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
 }

@@ -7,12 +7,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import peaksoft.entities.Like;
+import peaksoft.entities.Post;
 import peaksoft.entities.User;
 import peaksoft.service.FollowerService;
 import peaksoft.service.PostService;
 import peaksoft.service.UserService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -30,11 +33,17 @@ public class UserAPI {
         if (query != null && !query.isEmpty()) {
             userList = followerService.search(query);
         } else {
-            userList = followerService.search("");
+            userList = followerService.getAllUsers();
         }
+        List<Post> postList = postService.getAllPostsOfSubsAndOwnByUserId(user.getId());
         userList = userList.stream().filter(u -> !u.getId().equals(user.getId())).collect(Collectors.toList());
+        Map<Long, Long> likesCountMap = postList.stream()
+                .collect(Collectors.toMap(Post::getId, post -> post.getLikes().stream()
+                        .filter(Like::isLike)
+                        .count()));
+        model.addAttribute("postList", postList);
         model.addAttribute("userList", userList);
-        model.addAttribute("postList", postService.getAllPostsOfSubsAndOwnByUserId(user.getId()));
+        model.addAttribute("likesCountMap", likesCountMap);
         return "main-page";
     }
 

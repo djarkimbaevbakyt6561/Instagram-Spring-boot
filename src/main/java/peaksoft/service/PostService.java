@@ -11,8 +11,6 @@ public interface PostService {
 
     List<Post> getAllPostsOfSubsAndOwnByUserId(Long userId);
     Post getPostById(Long postId);
-
-
     void update(Post post);
 
     void delete(Post post);

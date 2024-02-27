@@ -12,4 +12,6 @@ public interface FollowerService {
     List<User> getAllSubscriptionsByUserId(Long userId);
     Follower getFollowerByUserId(Long userId);
     boolean isUserSubscribed(User subscribeUser, User userBeingSubscribedTo);
+
+    List<User> getAllUsers();
 }

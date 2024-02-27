@@ -7,6 +7,7 @@ import peaksoft.entities.User;
 import peaksoft.repository.PostRepository;
 import peaksoft.service.PostService;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,7 +24,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getAllPostsByUserId(Long userId) {
         try {
-            return postRepository.getAllPostsByUserId(userId);
+            List<Post> posts = postRepository.getAllPostsByUserId(userId);
+            Collections.reverse(posts);
+            return posts;
         } catch (Exception e){
             System.err.println(e.getMessage());
             return null;
@@ -36,12 +39,11 @@ public class PostServiceImpl implements PostService {
             List<User> subscribedUsers = postRepository.getAllSubsByUserId(userId);
             List<Post> ownPosts = getAllPostsByUserId(userId);
 
-            List<Post> postsOfSubscribedUsers = subscribedUsers.stream()
+            List<Post> postsOfSubscribedUsers = new ArrayList<>(subscribedUsers.stream()
                     .flatMap(user -> getAllPostsByUserId(user.getId()).stream())
-                    .toList();
-
+                    .toList());
+            Collections.reverse(postsOfSubscribedUsers);
             ownPosts.addAll(postsOfSubscribedUsers);
-            Collections.reverse(ownPosts);
             return ownPosts;
         } catch (Exception e) {
             System.err.println(e.getMessage());

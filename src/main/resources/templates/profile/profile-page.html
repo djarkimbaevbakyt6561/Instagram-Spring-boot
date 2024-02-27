@@ -170,7 +170,7 @@
             justify-content: space-between;
         }
 
-        .post_title_container > a {
+        .tool_container > a {
             text-decoration: none;
             color: black;
         }
@@ -178,6 +178,10 @@
             display: flex;
             align-items: center;
             gap: 5px;
+        }
+        .tool_container {
+            display: flex;
+            gap: 15px;
         }
     </style>
 </head>
@@ -231,13 +235,17 @@
                         <h3 th:text="${post.title}"></h3>
                         <p th:text="${post.description}"></p>
                     </div>
-                    <a th:if="${isThisMyProfile}" th:href="@{/profile/editPost(postId=${post.id})}">Edit</a>
-                    <a th:if="${isThisMyProfile}"
-                       th:href="@{/profile/deletePost/{postId}(postId=${post.id})}">Delete</a>
+                    <div class="tool_container">
+                        <a th:if="${isThisMyProfile}" th:href="@{/profile/editPost(postId=${post.id})}">Edit</a>
+                        <a th:if="${isThisMyProfile}"
+                           th:href="@{/profile/deletePost/{postId}(postId=${post.id})}">Delete</a>
+                    </div>
+
                 </div>
                 <div class="like_container">
-                    <p th:text="${post.likes.size()}">
-                    </p> likes
+                    <p>
+                        <span th:text="${likesCountMap.get(post.id)}"></span> likes
+                    </p>
                 </div>
             </div>
         </li>

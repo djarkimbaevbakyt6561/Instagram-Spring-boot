@@ -29,6 +29,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public Comment findById(Long commentId) {
+        try {
+            return commentRepository.findById(commentId).orElseThrow(Exception::new);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
     public void deleteById(Long commentId) {
         try {
             commentRepository.deleteById(commentId);

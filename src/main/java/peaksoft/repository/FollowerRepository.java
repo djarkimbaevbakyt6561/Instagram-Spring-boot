@@ -1,10 +1,8 @@
 package peaksoft.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import peaksoft.entities.Follower;
 import peaksoft.entities.User;
 
@@ -20,8 +18,6 @@ public interface FollowerRepository extends JpaRepository<Follower, Long> {
     List<User> getAllSubscriptionsByUserId(Long userId);
     @Query("SELECT f FROM Follower f WHERE f.user.id = (:userId)")
     Follower getFollowerByUserId(Long userId);
-    @Transactional
-    @Modifying
-    @Query("UPDATE Follower f SET f.subscriptions = :#{#follower.subscriptions}, f.subscribers = :#{#follower.subscribers} WHERE f.id = :#{#follower.id}")
-    void update(Follower follower);
+    @Query("SELECT u FROM User u")
+    List<User> getAllUsers();
 }
